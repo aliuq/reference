@@ -1,10 +1,7 @@
 name: "Upstream Sync"
 on:
   schedule:
-    # - cron: "0 */4 * * *" # 每 4 小时运行一次
-    # - cron: "0 */4 * * *" # 每 4 小时运行一次
-    # 每 2 分钟运行一次
-    - cron: "*/2 * * * *"
+    - cron: "0 */4 * * *" # 每 4 小时运行一次
 
   workflow_dispatch:
     inputs:
