@@ -1,7 +1,10 @@
 name: "Upstream Sync"
 on:
   schedule:
-    - cron: "0 */4 * * *" # 每 4 小时运行一次
+    # - cron: "0 */4 * * *" # 每 4 小时运行一次
+    # - cron: "0 */4 * * *" # 每 4 小时运行一次
+    # 每 2 分钟运行一次
+    - cron: "*/2 * * * *"
 
   workflow_dispatch:
     inputs:
@@ -19,5 +22,6 @@ jobs:
       upstream_sync_repo: jaywcjlove/reference
       upstream_sync_branch: main
       sync_test_mode: ${{ inputs.sync_test_mode }}
+      debug: true
     secrets:
       token: ${{ secrets.GITHUB_TOKEN }}
