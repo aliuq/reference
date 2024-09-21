@@ -8,10 +8,10 @@ on:
 
   workflow_dispatch:
     inputs:
-      sync_test_mode:
+      debug:
         description: "Fork Sync Test Mode"
-        type: boolean
-        default: false
+        type: string
+        default: 'false'
 
 jobs:
   call-workflow-sync:
@@ -21,7 +21,6 @@ jobs:
       target_sync_branch: main
       upstream_sync_repo: jaywcjlove/reference
       upstream_sync_branch: main
-      sync_test_mode: ${{ inputs.sync_test_mode }}
-      debug: true
+      debug: ${{ inputs.debug }}
     secrets:
       token: ${{ secrets.GITHUB_TOKEN }}
