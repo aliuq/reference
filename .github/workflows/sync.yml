@@ -10,6 +10,9 @@ on:
         type: string
         default: 'true'
 
+permissions:
+  contents: write
+
 jobs:
   call-workflow-sync:
     uses: aliuq/workflows/.github/workflows/sync.yml@master
