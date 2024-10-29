@@ -1,10 +1,15 @@
-## 基本命令
+PowerShell 备忘清单
+===
+
+一种强大的命令行界面和脚本语言，主要用于自动化任务和配置管理，特别适合系统管理员和 IT 专业人士。以下是 PowerShell 常用命令的备忘清单，可帮助快速参考常用操作。
+
+常用操作
+---
 
 ### 辅助命令
+<!--rehype:wrap-class=row-span-2-->
 
-**_Powershell 的命令遵循动词-名词格式_**
-
-一些常见的动词:
+**_PowerShell 的命令遵循动词-名词格式_** 一些常见的动词:
 
 | 动词    | 描述                     |
 | ------- | ------------------------ |
@@ -22,48 +27,48 @@
 
 列出可用模块
 
-```powershell
+```PowerShell
 Get-Module --ListAvailable
 ```
 
 列出可用的 cmdlet 和函数
 
-```powershell
+```PowerShell
 Get-Command -Module ActiveDirectory
+```
+
+列出别名及其对应的 cmdlet 名称
+
+```PowerShell
+Get-Alias | Select-Object Name, Definition
 ```
 
 获取帮助
 
-```powershell
+```PowerShell
 Get-Help <cmd>
 Get-Help <cmd> -Examples
 Get-Help -Name Get-Process -Parameter Id
 ```
 
-列出别名及其对应的 cmdlet 名称
-
-
-```powershell
-Get-Alias | Select-Object Name, Definition
-```
-
 **Get-Member:** 显示对象的属性和方法
 
-```powershell
+```PowerShell
 Get-Process | Get-Member
 ```
 
 ### 对象操作
+<!--rehype:wrap-class=col-span-2-->
 
 **Select-Object:** 选择对象的特定属性或自定义其显示
 
-```powershell
+```PowerShell
 Get-Process | Select-Object Name, CPU
 ```
 
 **Where-Object:** 根据指定条件过滤对象
 
-```powershell
+```PowerShell
 Get-Service | Where-Object { $PSItem.Status -eq 'Running' }
 #OR
 Get-Service | ? { $_.Status -eq 'Running' }
@@ -71,37 +76,38 @@ Get-Service | ? { $_.Status -eq 'Running' }
 
 **Measure-Object:** 计算对象属性的统计信息，如总和、平均值和计数
 
-```powershell
+```PowerShell
 Get-Process | Measure-Object -Property WorkingSet -Sum
 ```
 
 **ForEach-Object:** 对集合中的每个对象执行操作（注意：以下命令将为当前目录中的文件/文件夹添加前缀）
 
-```powershell
+```PowerShell
 Get-ChildItem | ForEach-Object { Rename-Item $_ -NewName "Prefix_$_" }
 ```
 
 **Sort-Object:** 按指定属性对对象进行排序
 
-```powershell
+```PowerShell
 Get-ChildItem | Sort-Object Length -Descending
 ```
 
 **Format-Table:** 将输出格式化为带有指定列的表格
 
-```powershell
+```PowerShell
 Get-Service | Format-Table -AutoSize  # ft alias
 ```
 
 **Format-List:** 将输出格式化为属性和值的列表
 
-```powershell
+```PowerShell
 Get-Process | Format-List -Property Name, CPU  # fl alias
 ```
 
-### 文件系统 
+### 文件系统
+<!--rehype:wrap-class=col-span-2-->
 
-```powershell
+```PowerShell
 New-Item -path file.txt -type 'file' -value 'contents'
 New-Item -path file.txt -type 'dir'
 Copy-Item <src> -destination <dest>
@@ -120,9 +126,12 @@ Get-Process | Export-Csv -Path "processes.csv"  # 输出到 CSV
 $data = Import-Csv -Path "data.csv"             # 从 CSV 导入
 ```
 
-## 系统管理
+系统管理
+---
 
-```powershell
+### 获取信息
+
+```PowerShell
 # 获取 BIOS 信息
 Get-CimInstance -ClassName Win32_BIOS
 # 获取本地连接的物理磁盘设备信息
@@ -133,18 +142,34 @@ Get-CimInstance -ClassName Win32_PhysicalMemory
 Get-CimInstance -ClassName Win32_NetworkAdapter
 # 获取安装的图形/显卡（GPU）信息
 Get-CimInstance -ClassName Win32_VideoController
+```
 
-# 列出所有类名
+### 命名空间 & 类
+
+列出所有类名
+
+```PowerShell
 Get-CimClass | Select-Object -ExpandProperty CimClassName
-# 探索 root\cimv2 命名空间中的各种 WMI 类
+```
+<!--rehype:className=wrap-text-->
+
+探索 root\cimv2 命名空间中的各种 WMI 类
+
+```PowerShell
 Get-CimClass -Namespace root\cimv2
-# 探索 root\cimv2 命名空间下的子 WMI 命名空间
+```
+<!--rehype:className=wrap-text-->
+
+探索 root\cimv2 命名空间下的子 WMI 命名空间
+
+```PowerShell
 Get-CimInstance -Namespace root -ClassName __NAMESPACE
 ```
+<!--rehype:className=wrap-text-->
 
 ### 网络管理
 
-```powershell
+```PowerShell
 # 测试与远程主机的网络连接
 Test-Connection -ComputerName google.com
 
@@ -159,12 +184,11 @@ Get-NetRoute
 
 # 测试远程主机上的端口是否开放
 Test-NetConnection google.com -Port 80
-
 ```
 
 ### 用户和组管理
 
-```powershell
+```PowerShell
 # 获取本地用户账户信息
 Get-LocalUser
 
@@ -183,17 +207,22 @@ Add-LocalGroupMember -Group Administrators -Member UserToAdd
 
 ### 安全性和权限
 
-```powershell
-# 获取文件/目录的访问控制列表
-Get-Acl C:\Path\To\File.txt
+获取文件/目录的访问控制列表
 
-# 设置文件/目录的访问控制列表
+```PowerShell
+Get-Acl C:\Path\To\File.txt
+```
+
+设置文件/目录的访问控制列表
+
+```PowerShell
 Set-Acl -Path C:\Path\To\File.txt -AclObject $aclObject
 ```
+<!--rehype:className=wrap-text-->
 
 ### 注册表管理
 
-```powershell
+```PowerShell
 # 获取注册表键值
 Get-ItemProperty -Path "HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall\*" | Select DisplayName, DisplayVersion
 
@@ -212,11 +241,11 @@ Test-Path "HKLM:\Software\MyApp"
 
 ## 脚本
 
-###  变量
+### 变量
 
 初始化变量，指定或不指定类型：
 
-```powershell
+```PowerShell
 $var = 0
 [int] $var = 'Trevor'         # (抛出异常)
 [string] $var = 'Trevor'      # (不会抛出异常)
@@ -234,7 +263,7 @@ $dict = @{k1 = 'test'; k2 = 'best'}
 
 变量命令
 
-```Powershell
+```PowerShell
 New-Variable -Name FirstName -Value Trevor
 New-Variable FirstName -Value Trevor -Option <ReadOnly/Constant>
 
@@ -251,7 +280,7 @@ Remove-Variable -Name firstname -Force
 
 ### 运算符
 
-```powershell
+```PowerShell
 # 运算符
 # (a <op> b)
 
@@ -284,7 +313,7 @@ $regex.Matches('this is test').Value
 
 #### 输入输出操作
 
-```powershell
+```PowerShell
 "This displays a string"
 
 Write-Host "color" -ForegroundColor Red
@@ -298,12 +327,12 @@ Clear-Host
 
 #### 流控制
 
-```powershell
+```PowerShell
 IF(<#Condition#>){
 <#Commands#>}ELSEIF(){}ELSE{}
 
 Switch($var){
-	"val1"{<#Commands#>; break}
+  "val1"{<#Commands#>; break}
     "val2"{<#Commands#>; break}
 }
 
@@ -321,15 +350,15 @@ Do{}While()
 
 #### 示例 1
 
-```powershell
+```PowerShell
 function funcname{
 
     [CmdletBinding()]
-	param(
-		[Parameter(Mandatory)]
-		[String]$user
-	)
-	Write-Host "welcome " $user
+  param(
+    [Parameter(Mandatory)]
+    [String]$user
+  )
+  Write-Host "welcome " $user
     return "value"
 }
 $var = funcname -user pcb
@@ -337,7 +366,7 @@ $var = funcname -user pcb
 
 #### 示例 2
 
-```powershell
+```PowerShell
 function Get-EvenNumbers {
     [CmdletBinding()]
     param (
@@ -358,7 +387,7 @@ function Get-EvenNumbers {
 
 #### 模块
 
-```powershell
+```PowerShell
 # PowerShell 在路径中查找模块
 $env:PSModulePath
 
@@ -381,11 +410,9 @@ New-Module -Name trevor -ScriptBlock {
 
 ### 注意
 
-
 - 在大多数语言中，转义字符是反斜杠 **\\**，而在 PowerShell 中是反引号 **`**
-
 
 ## 参考
 
-- [Microsoft Powershell](https://learn.microsoft.com/en-us/powershell/scripting/samples/sample-scripts-for-administration?view=powershell-7.3) _(learn.microsoft.com)_
+- [Microsoft PowerShell](https://learn.microsoft.com/en-us/powershell/scripting/samples/sample-scripts-for-administration?view=powershell-7.3) _(learn.microsoft.com)_
 - [cheatsheets](https://cheatsheets.zip/powershell)
