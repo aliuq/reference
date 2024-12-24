@@ -16,7 +16,7 @@ permissions:
 
 jobs:
   call-workflow-sync:
-    uses: aliuq/workflows/.github/workflows/aliuq-sync.yml@master
+    uses: aliuq/workflows/.github/workflows/sync-with-notify.yml@master
     with:
       upstream_repo: jaywcjlove/reference
       upstream_branch: main
