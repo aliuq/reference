@@ -5,9 +5,9 @@ Helm 备忘清单
 
 快速入门
 ---
-<!--rehype:body-class=cols-2-->
 
 ### 安装与检查
+<!--rehype:wrap-class=row-span-2-->
 
 ```bash
 # macOS
@@ -15,8 +15,11 @@ $ brew install helm
 
 # Windows
 $ winget install Helm.Helm
+```
 
-# 查看版本、帮助和客户端环境
+查看版本、帮助和客户端环境
+
+```
 $ helm version
 $ helm help
 $ helm env
@@ -30,6 +33,7 @@ $ kubectl cluster-info
 ```
 
 ### 核心概念
+<!--rehype:wrap-class=col-span-2-->
 
 | 名称 | 说明 |
 | --- | --- |
@@ -38,20 +42,29 @@ $ kubectl cluster-info
 | Release | Chart 安装到集群后形成的实例 |
 | Revision | Release 每次安装、升级或回滚产生的版本 |
 | Values | 用于覆盖 Chart 默认配置的值 |
+<!--rehype:className=left-align-->
 
 ### 最短工作流
+<!--rehype:wrap-class=col-span-2-->
+
+添加仓库并刷新索引
 
 ```bash
-# 添加仓库并刷新索引
 $ helm repo add bitnami https://charts.bitnami.com/bitnami
 $ helm repo update
+```
 
-# 搜索、查看配置并安装
+搜索、查看配置并安装
+
+```shell
 $ helm search repo bitnami/nginx
 $ helm show values bitnami/nginx > values.yaml
 $ helm install my-nginx bitnami/nginx -f values.yaml
+```
 
-# 查看、升级和卸载
+查看、升级和卸载
+
+```shell
 $ helm status my-nginx
 $ helm upgrade my-nginx bitnami/nginx -f values.yaml
 $ helm uninstall my-nginx
@@ -81,14 +94,18 @@ $ helm repo add stable https://new.example.com/charts --force-update
 
 ### 搜索 Chart
 
+搜索已添加的本地仓库索引
+
 ```bash
-# 搜索已添加的本地仓库索引
 $ helm search repo nginx
 $ helm search repo nginx --versions
 $ helm search repo nginx --version '^15.0.0'
 $ helm search repo nginx --devel
+```
 
-# 搜索 Artifact Hub
+搜索 Artifact Hub
+
+```
 $ helm search hub nginx
 ```
 
@@ -120,9 +137,9 @@ $ helm pull bitnami/nginx --verify
 
 安装与升级
 ---
-<!--rehype:body-class=cols-2-->
 
 ### 安装 Release
+<!--rehype:wrap-class=col-span-2-->
 
 ```bash
 $ helm install <release> <chart>
@@ -136,10 +153,13 @@ $ helm install my-app bitnami/nginx -n production --create-namespace
 
 ```bash
 $ helm install bitnami/nginx --generate-name
-$ helm install bitnami/nginx --generate-name --name-template 'web-{{ now | unixEpoch }}'
+$ helm install bitnami/nginx \
+    --generate-name \
+    --name-template 'web-{{ now | unixEpoch }}'
 ```
 
 ### 常用安装参数
+<!--rehype:wrap-class=row-span-2-->
 
 ```bash
 $ helm install my-app ./chart \
@@ -152,6 +172,8 @@ $ helm install my-app ./chart \
     --rollback-on-failure
 ```
 
+---
+
 | 参数 | 作用 |
 | --- | --- |
 | `-n, --namespace` | 指定命名空间 |
@@ -163,10 +185,12 @@ $ helm install my-app ./chart \
 | `--rollback-on-failure` | 失败时回滚或删除安装，并自动启用等待 |
 | `--dry-run=client` | 仅在客户端模拟，不连接集群 |
 | `--dry-run=server` | 在服务端模拟和校验，需要连接集群 |
+<!--rehype:className=left-align-->
 
 Helm 3 使用 `--atomic` 表示失败时自动回滚；Helm 4 已将它替换为含义更清晰的 `--rollback-on-failure`。
 
 ### 升级 Release
+<!--rehype:wrap-class=col-span-2-->
 
 ```bash
 $ helm upgrade my-app ./chart
@@ -185,6 +209,7 @@ $ helm upgrade --install my-app ./chart \
 ```
 
 ### 预览变更
+<!--rehype:wrap-class=col-span-2-->
 
 ```bash
 # 仅在本地渲染模板
@@ -205,6 +230,7 @@ Values 配置
 <!--rehype:body-class=cols-2-->
 
 ### 设置 Values
+<!--rehype:wrap-class=row-span-2-->
 
 ```bash
 # 单个或多个值
@@ -405,6 +431,7 @@ $ helm push mychart-1.2.3.tgz oci://registry.example.com/helm
 推送目标不包含 Chart 名称和版本；Helm 会从包内元数据生成它们。
 
 ### 拉取、查看和安装 OCI Chart
+<!--rehype:wrap-class=col-span-2-->
 
 ```bash
 $ helm pull oci://registry.example.com/helm/mychart --version 1.2.3
@@ -429,6 +456,7 @@ $ helm <command> --qps 20 --burst-limit 50
 ```
 
 ### 自动补全
+<!--rehype:wrap-class=row-span-2-->
 
 ```bash
 # Bash
@@ -457,17 +485,24 @@ $ helm plugin uninstall <plugin-name>
 
 ### 常见排错
 
+检查当前集群和 Helm 环境
+
 ```bash
-# 检查当前集群和 Helm 环境
 $ kubectl config current-context
 $ helm env
+```
 
-# 查看失败状态、历史和渲染后的资源
+查看失败状态、历史和渲染后的资源
+
+```
 $ helm status my-app -n production
 $ helm history my-app -n production
 $ helm get manifest my-app -n production
+```
 
-# 检查集群事件和工作负载
+检查集群事件和工作负载
+
+```
 $ kubectl get events -n production --sort-by=.lastTimestamp
 $ kubectl get pods -n production
 $ kubectl describe pod <pod-name> -n production
